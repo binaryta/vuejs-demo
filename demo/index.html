@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+  </head>
+<body>
+    <div id="main">
+      <h1>todos</h1>
+      <div class="todoapp">
+        <input
+           class="new-todo"
+           :value="inputText"
+           @input="inputTextUpdate($event.target.value)"
+           @keyup.enter="createTodo($event.target.value)"/>
+        <template v-for="todo in todos">
+          <todo-list
+            v-bind:todo="todo"
+            v-bind:filter-type="filterType"
+            v-on:destroy="destroyTodo">
+          </todo-list>
+        </template>
+        <footer>
+          <ul>
+            <li v-if="todos.length != 0" >
+              <span>{{todos.length}} {{todos.length | pluralize}} left</span>
+              <span>
+                <a href="#" :class="{selected: !filterType}" @click="filterTodo(false)" @click.self.prevent>Active</a>
+              </span>
+              <span>
+                <a href="#" :class="{selected: filterType}" @click="filterTodo(true)" @click.self.prevent>Completed</a>
+              </span>
+            </li>
+          </ul>
+        </footer>
+      </div>
+
+    </div>
+</body>
+<script src="./dist/viewmodel/home.js"></script>
+</html>
