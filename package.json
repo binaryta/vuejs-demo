@@ -21,7 +21,7 @@
   "scripts": {
     "build": "webpack --progress --colors --config ./webpack.config.js",
     "build:watch": "webpack --progress --colors --watch --config ./webpack.config.js",
-    "start": "webpack-dev-server --content-base demo/"
+    "start": "webpack-dev-server"
   },
   "dependencies": {
     "axios": "^0.16.1",

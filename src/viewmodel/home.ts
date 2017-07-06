@@ -1,6 +1,8 @@
 import {Vue, Component} from "vue-property-decorator";
 import ListComponent from "../component/List.vue";
-import Todo from "../todo";
+import Todo from "../data/todo";
+import {HomeStore} from "../store/home";
+import {Subscription} from 'rxjs';
 
 @Component({
   components: {
@@ -17,8 +19,21 @@ class HomeViewModel extends Vue {
   public todos: Todo[] = [];
   public filterType: boolean = false;
 
+  public store: HomeStore = new HomeStore();
+  public subscription: Subscription;
+
+  public created(): void {
+    this.store.onTodosChanged.subscribe( todos => {
+      this.todos = todos;
+    })
+
+    this.store.onInputTextChanged.subscribe( text => {
+      this.inputText = text;
+    })
+  }
+
   public inputTextUpdate(text: string) {
-    this.inputText = text;
+    this.store.changeInputText(text);
   }
 
   public filterTodo(filterType: boolean) {
@@ -26,9 +41,8 @@ class HomeViewModel extends Vue {
   }
 
   public createTodo(text: string) {
-    const todo = new Todo(this.todos.length + 1, text);
-    this.todos.push(todo);
-    this.inputText = "";
+    this.store.addTodo(text);
+    this.store.changeInputText("");
   }
 
   public destroyTodo(index: number) {
